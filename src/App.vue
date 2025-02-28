@@ -1,17 +1,21 @@
 <script setup>
+import Header from './components/Header.vue'
 import Generator from './components/Generator.vue'
+import Footer from './components/Footer.vue'
 </script>
 
 <template>
-  <header>
-    <div class="wrapper">
-      <h1>PNG</h1>
-    </div>
-  </header>
+	<header>
+		<Header />
+	</header>
 
-  <main>
-    <Generator />
-  </main>
+	<main>
+		<Generator />
+	</main>
+
+	<footer>
+		<Footer />
+	</footer>
 </template>
 
 <style scoped></style>

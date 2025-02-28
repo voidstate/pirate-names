@@ -1,5 +1,5 @@
 <script setup>
-import WelcomeItem from './WelcomeItem.vue'
+
 import DocumentationIcon from './icons/IconDocumentation.vue'
 import ToolingIcon from './icons/IconTooling.vue'
 import EcosystemIcon from './icons/IconEcosystem.vue'
@@ -10,5 +10,9 @@ const openReadmeInEditor = () => fetch( '/__open-in-editor?file=README.md' )
 </script>
 
 <template>
+	<div>
+		<p>I am the body</p>
+		<p><a href="#">Link!</a></p>
+	</div>
 
 </template>

@@ -1,6 +1,20 @@
 [
-    "{{adjective}} {{forename}}",
-    "{{forename}} O'{{surname}}",
-    "{{adjective}} {{forename}}",
-    "{{adjective}} {{surname}}"
+    "%adjective% %forename%",
+    "%adjective% %surname%",
+    "%adjective% %forename% %surname%",
+    "The %adjective% %noun%",
+    "%adjective% %noun% %forename%",
+    "%forename% o' the %noun%",
+    "%forename% O'%surname%",
+    "%forename% Mc%surname%",
+    "%forename% the %adjective%",
+    "%forename% the %adjective% %noun%",
+    "%forename% the %noun%",
+    "%forename% %surname% the %adjective% %noun%",
+    "%adjective% %forename%",
+    "%adjective%, %adjective% %forename%",
+    "The %adjective% %noun%",
+    "Two %noun%s %forename%",
+    "All %noun%, No %noun%",
+    "No %noun% %forename%"
 ]

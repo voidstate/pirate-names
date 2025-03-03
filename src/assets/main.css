@@ -8,12 +8,19 @@
 	border: var(--layout-border-width) solid var(--color-border);
 	border-radius: 1rem;
 	background-color: var(--color-background-mute);
+
+	box-shadow: 0px 0px 200px 30px var(--color-glow);
 }
 
 a {
 	text-decoration: none;
 	color: var(--color-link);
 	transition: 0.4s;
+}
+
+svg {
+	display: block;
+	vertical-align: middle;
 }
 
 @media (hover: hover) {
@@ -26,11 +33,11 @@ a {
 	body {
 		display: flex;
 		place-items: center;
+		justify-content: center;
 	}
 
 	.app {
-		margin: 1rem auto;
 		padding: 2rem 4rem;
-		min-width: 768px;
+		width: 100%;
 	}
 }

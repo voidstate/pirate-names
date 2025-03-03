@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Quintessential&family=Trade+Winds&display=swap');
 @import 'tailwindcss';
 
 /* color palette from <https://github.com/vuejs/theme> */
@@ -17,7 +18,7 @@
 	--colour-palette-divider-2: hsl(from var(--colour-palette-green) h s calc(l - 10));
 
 	--colour-palette-text-1: var(--colour-palette-white);
-	--colour-palette-text-2: rgba(235, 235, 235, 0.64);
+	--colour-palette-text-2: rgba(225, 245, 225, 0.64);
 }
 
 /* semantic color variables for this project */
@@ -31,10 +32,13 @@
 
 	--color-heading: var(--colour-palette-green);
 	--color-text: var(--colour-palette-white-soft);
-	--color-text-subtext: var(--colour-palette-white-mute);
+	--color-text-muted: var(--colour-palette-white-mute);
+	--color-text-grey: var(--colour-palette-text-2);
 
 	--color-link: var(--colour-palette-green);
 	--color-link-active: hsl(from var(--color-link) h s calc(l - 20));
+
+	--color-glow: #2dffc4b3;
 
 	--layout-gap: 2rem;
 
@@ -49,20 +53,10 @@ body {
 		color 0.5s,
 		background-color 0.5s;
 	line-height: 1.6;
-	font-family:
-		Inter,
-		-apple-system,
-		BlinkMacSystemFont,
-		'Segoe UI',
-		Roboto,
-		Oxygen,
-		Ubuntu,
-		Cantarell,
-		'Fira Sans',
-		'Droid Sans',
-		'Helvetica Neue',
-		sans-serif;
-	font-size: 15px;
+	font-family: 'Quintessential', serif;
+	font-weight: 400;
+	font-style: normal;
+	font-size: clamp(14px, 5vw, 32px);
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;

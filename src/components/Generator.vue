@@ -56,7 +56,7 @@ const newName = ( event ) =>
 		// output previous names in a comma-separated list
 		nameLogOutput = [ ...nameLog ]
 		nameLogOutput.shift()
-		nameLogOutput = nameLogOutput.join( ', ' )
+		nameLogOutput = nameLogOutput.map( ( name, index ) => `<span class="log-${ index }">${ name }</span>` ).join( ', ' )
 
 	}
 }
@@ -85,7 +85,7 @@ const name = ref( `What's me name then, cap'n?` )
 			</div>
 		</div>
 		<div class="generator__factoid"></div>
-		<div v-if="nameLogOutput.length" class="generator__log">{{ nameLogOutput }}</div>
+		<div v-if="nameLogOutput.length" v-html="nameLogOutput" class="generator__log"></div>
 
 	</div>
 </template>
@@ -116,7 +116,7 @@ const name = ref( `What's me name then, cap'n?` )
 	cursor: pointer;
 }
 
-.generator__btn svg
+.generator__btn :is(svg, path)
 {
 	fill: var(--color-link);
 	transition: transform 0.9s;
@@ -135,5 +135,20 @@ const name = ref( `What's me name then, cap'n?` )
 	text-align: left;
 	font-size: 70%;
 	color: var(--color-text-muted);
+}
+
+.generator__log span.log-0
+{
+	color: var(--color-text-grey);
+}
+
+.generator__log span.log-1
+{
+	color: var(--color-text-greyer);
+}
+
+.generator__log span
+{
+	color: var(--color-text-greyest);
 }
 </style>

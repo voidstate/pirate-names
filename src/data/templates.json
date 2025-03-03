@@ -14,6 +14,7 @@
     "%adjective% %forename%",
     "%adjective%, %adjective% %forename%",
     "The %adjective% %noun%",
+    "%noun%-face %forename%",
     "Two %noun%s %forename%",
     "All %noun%, No %noun%",
     "No %noun% %forename%"

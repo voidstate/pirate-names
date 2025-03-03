@@ -5,17 +5,19 @@ import Footer from './components/Footer.vue'
 </script>
 
 <template>
-	<header>
-		<Header />
-	</header>
+	<div class="app__inner">
+		<header>
+			<Header />
+		</header>
 
-	<main>
-		<Generator />
-	</main>
+		<main>
+			<Generator />
+		</main>
 
-	<footer>
-		<Footer />
-	</footer>
+		<footer>
+			<Footer />
+		</footer>
+	</div>
 </template>
 
 <style scoped></style>

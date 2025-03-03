@@ -1,18 +1,19 @@
 @import './base.css';
 
-#app {
-	max-width: 1280px;
-	margin: 0 auto;
+.app {
+	max-width: 1024px;
+	margin: 1rem;
 	padding: 2rem;
 	font-weight: normal;
+	border: var(--layout-border-width) solid var(--color-border);
+	border-radius: 1rem;
+	background-color: var(--color-background-mute);
 }
 
-a,
-.green {
+a {
 	text-decoration: none;
 	color: var(--color-link);
 	transition: 0.4s;
-	padding: 3px;
 }
 
 @media (hover: hover) {
@@ -21,15 +22,15 @@ a,
 	}
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
 	body {
 		display: flex;
 		place-items: center;
 	}
 
-	#app {
-		display: grid;
-		grid-template-columns: 1fr;
-		padding: 0 2rem;
+	.app {
+		margin: 1rem auto;
+		padding: 2rem 4rem;
+		min-width: 768px;
 	}
 }

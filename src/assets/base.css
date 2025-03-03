@@ -2,50 +2,49 @@
 
 /* color palette from <https://github.com/vuejs/theme> */
 :root {
-	--colour-palette-white: #ffffff;
-	--colour-palette-white-soft: #f8f8f8;
-	--colour-palette-white-mute: #f2f2f2;
+	--colour-palette-white: #efefef;
+	--colour-palette-white-soft: #d7d7d7;
+	--colour-palette-white-mute: #cccccc;
 
 	--colour-palette-black: #181818;
 	--colour-palette-black-soft: #222222;
 	--colour-palette-black-mute: #282828;
 
 	--colour-palette-indigo: #2c3e50;
-	--colour-palette-green: #00bd7e;
+	--colour-palette-green: #01724c;
 
-	--colour-palette-divider-light-1: rgba(60, 60, 60, 0.29);
-	--colour-palette-divider-light-2: rgba(60, 60, 60, 0.12);
-	--colour-palette-divider-dark-1: rgba(84, 84, 84, 0.65);
-	--colour-palette-divider-dark-2: rgba(84, 84, 84, 0.48);
+	--colour-palette-divider-1: var(--colour-palette-green);
+	--colour-palette-divider-2: hsl(from var(--colour-palette-green) h s calc(l - 10));
 
-	--colour-palette-text-light-1: var(--colour-palette-indigo);
-	--colour-palette-text-light-2: rgba(60, 60, 60, 0.66);
-	--colour-palette-text-dark-1: var(--colour-palette-white);
-	--colour-palette-text-dark-2: rgba(235, 235, 235, 0.64);
+	--colour-palette-text-1: var(--colour-palette-white);
+	--colour-palette-text-2: rgba(235, 235, 235, 0.64);
 }
 
 /* semantic color variables for this project */
 :root {
-	--color-background: var(--colour-palette-white);
-	--color-background-soft: var(--colour-palette-white-soft);
-	--color-background-mute: var(--colour-palette-white-mute);
+	--color-background: var(--colour-palette-black);
+	--color-background-soft: var(--colour-palette-black-soft);
+	--color-background-mute: var(--colour-palette-black-mute);
 
-	--color-border: var(--colour-palette-divider-light-2);
-	--color-border-hover: var(--colour-palette-divider-light-1);
+	--color-border: var(--colour-palette-divider-2);
+	--color-border-hover: var(--colour-palette-divider-1);
 
-	--color-heading: var(--colour-palette-text-light-1);
-	--color-text: var(--colour-palette-text-light-1);
+	--color-heading: var(--colour-palette-green);
+	--color-text: var(--colour-palette-white-soft);
+	--color-text-subtext: var(--colour-palette-white-mute);
 
 	--color-link: var(--colour-palette-green);
-	--color-link-active: hsl(from var(--color-link) h s calc(l - 10));
+	--color-link-active: hsl(from var(--color-link) h s calc(l - 20));
 
-	--gap: 2rem;
+	--layout-gap: 2rem;
+
+	--layout-border-width: 0.125rem;
 }
 
 body {
 	min-height: 100vh;
 	color: var(--color-text);
-	background: var(--color-background);
+	background-color: var(--color-background);
 	transition:
 		color 0.5s,
 		background-color 0.5s;

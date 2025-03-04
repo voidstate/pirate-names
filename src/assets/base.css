@@ -38,7 +38,7 @@
 	--color-text-greyest: hsl(from var(--colour-palette-text-2) h calc(s - 20) calc(l - 20));
 
 	--color-link: var(--colour-palette-green);
-	--color-link-active: hsl(from var(--color-link) h s calc(l - 20));
+	--color-link-active: hsl(from var(--color-link) h s calc(l + 10));
 
 	--color-glow: #2dffc4b3;
 

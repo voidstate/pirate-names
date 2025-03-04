@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Quintessential&family=Trade+Winds&display=swap');
-@import 'tailwindcss';
 
-/* color palette from <https://github.com/vuejs/theme> */
+/* color palette */
 :root {
 	--colour-palette-white: #efefef;
 	--colour-palette-white-soft: #d7d7d7;

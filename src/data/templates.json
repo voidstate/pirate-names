@@ -10,13 +10,15 @@
     "%forename% the %adjective%",
     "%forename% the %adjective% %noun%",
     "%forename% the %noun%",
+    "%forename% %noun%",
     "%forename% %surname% the %adjective% %noun%",
     "%adjective% %forename%",
     "%adjective%, %adjective% %forename%",
-    "The %adjective% %noun%",
+    "&#8220;The %adjective% %noun%&#8220;",
     "%noun%-face %forename%",
     "Two %noun%s %forename%",
-    "All %noun%, No %noun%",
+    "&#8220;All %noun%, No %noun%&#8220;",
     "No %noun% %forename%",
-    "%adjective% and %adjective%"
+    "&#8220;%adjective% and %adjective%&#8220;",
+    "%noun%-shagger %forename%"
 ]

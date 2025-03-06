@@ -72,7 +72,9 @@ const name = ref( `What's me name then, cap'n?` )
 <template>
 	<div class="generator">
 		<div class="generator__name-container">
-			<div class="generator__name">{{ name }}</div>
+			<div class="generator__name">
+				<span v-html="name"></span>
+			</div>
 			<div class="generator__btn">
 				<button @click="newName">
 					<span v-if="nameLog.length === 0" class="generator__btn--arrow">

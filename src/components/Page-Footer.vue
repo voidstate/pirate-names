@@ -1,15 +1,49 @@
+<script setup>
+	import GithubIcon from './icons/IconGithub.vue'
+</script>
+
 <template>
-	<div>web app by <a href="//voidstate.com/rpg">voidstate</a></div>
+	<div class="footer-container">
+		web app by <a href="//voidstate.com/rpg">voidstate</a>
+		<span>|</span>
+		<a href="//github.com/voidstate/pirate-names"><GithubIcon class="footer-container__icon"/></a>
+	</div>
 </template>
 
 <style>
-footer
-{
-	margin-top: 2rem;
-	border-top: 1px solid var(--color-border);
-	padding: 1rem;
-	text-align: right;
-	font-size: 70%;
-	color: var(--color-text-muted);
-}
+	footer
+	{
+		margin-top: 2rem 0;
+		border-top: 1px solid var(--color-border);
+		padding: 1rem;
+		text-align: right;
+		font-size: 70%;
+		color: var(--color-text-muted);
+
+		& > div {
+			display: flex;
+			flex-direction: row;
+			gap: .5rem;
+			align-items: center;
+			justify-content: flex-end;
+		}
+
+		.footer-container__icon {
+			width: 1.5rem;
+			display: inline-block;
+			height: auto;
+			margin-top: -3px;
+
+
+			path {
+				fill: var(--color-link);
+			}
+		}
+
+		a:is(:hover, :active) {
+			.footer-container__icon path {
+				fill: var(--color-link-active);
+			}
+		}
+	}
 </style>

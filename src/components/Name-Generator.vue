@@ -4,7 +4,6 @@ import { ref } from 'vue'
 
 import SkullIcon from './icons/IconSkull.vue'
 import ArrowIcon from './icons/IconArrow.vue'
-import ReloadIcon from './icons/IconReload.vue'
 
 import adjectives from '../data/adjectives.json' with {type: 'json'}
 import nouns from '../data/nouns.json' with {type: 'json'}

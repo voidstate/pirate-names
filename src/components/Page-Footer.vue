@@ -1,5 +1,5 @@
 <template>
-	<footer>web app by <a href="//voidstate.com/rpg">voidstate</a></footer>
+	<div>web app by <a href="//voidstate.com/rpg">voidstate</a></div>
 </template>
 
 <style>

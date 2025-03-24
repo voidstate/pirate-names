@@ -1,21 +1,21 @@
 <script setup>
-import Header from './components/Header.vue'
-import Generator from './components/Generator.vue'
-import Footer from './components/Footer.vue'
+import PageHeader from './components/Page-Header.vue'
+import NameGenerator from './components/Name-Generator.vue'
+import PageFooter from './components/Page-Footer.vue'
 </script>
 
 <template>
 	<div class="app__inner">
 		<header>
-			<Header />
+			<PageHeader />
 		</header>
 
 		<main>
-			<Generator />
+			<NameGenerator />
 		</main>
 
 		<footer>
-			<Footer />
+			<PageFooter />
 		</footer>
 	</div>
 </template>

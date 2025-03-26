@@ -10,7 +10,7 @@
 	border-radius: 1rem;
 	background-color: var(--color-background-mute);
 
-	box-shadow: 0px 0px 200px 30px var(--color-glow);
+	box-shadow: 0 0 12rem 2rem var(--color-glow);
 }
 
 a {
@@ -38,7 +38,7 @@ svg {
 	}
 
 	.app {
-		padding: 2rem 4rem;
+		padding: 2rem 4rem 0;
 		width: 100%;
 	}
 }

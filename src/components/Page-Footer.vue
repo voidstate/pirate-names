@@ -13,9 +13,9 @@
 <style>
 	footer
 	{
-		margin-top: 2rem 0;
+		margin-top: 4rem;
 		border-top: 1px solid var(--color-border);
-		padding: 1rem;
+		padding: 1rem 0;
 		text-align: right;
 		font-size: 70%;
 		color: var(--color-text-muted);
@@ -33,7 +33,6 @@
 			display: inline-block;
 			height: auto;
 			margin-top: -3px;
-
 
 			path {
 				fill: var(--color-link);

@@ -24,12 +24,12 @@ module.exports = defineConfig({
 */
 
 // Module version
-//import '@vue/cli-service' from defineConfig
+import { defineConfig } from 'vite' from defineConfig
 module.exports = {
 	lintOnSave: true,
 	publicPath:
 		process.env.NODE_ENV === 'production'
-			? './xxx/'
-			: '/yyy/'
+			? './'
+			: '/'
 
 }

@@ -1,22 +1,23 @@
 <script setup>
-import PageHeader from './components/Page-Header.vue'
-import NameGenerator from './components/Name-Generator.vue'
-import PageFooter from './components/Page-Footer.vue'
+import PageHeader from '@/components/Page-Header.vue'
+import PageFooter from '@/components/Page-Footer.vue'
 </script>
 
 <template>
-	<div class="app__inner">
-		<header>
-			<PageHeader />
-		</header>
+	<div class="app__wrapper">
+		<div class="app__inner">
+			<header>
+				<PageHeader />
+			</header>
 
-		<main>
-			<NameGenerator />
-		</main>
+			<main>
+				<RouterView />
+			</main>
 
-		<footer>
-			<PageFooter />
-		</footer>
+			<footer>
+				<PageFooter />
+			</footer>
+		</div>
 	</div>
 </template>
 

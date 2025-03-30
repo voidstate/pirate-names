@@ -1,12 +1,10 @@
 <script setup>
 	import GithubIcon from './icons/IconGithub.vue'
-
-
 </script>
 
 <template>
 	<div class="footer-container">
-				<span>
+		<span>
 			web app by <a href="//voidstate.com/rpg">voidstate</a>
 		</span>
 		<span>|</span>

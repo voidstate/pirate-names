@@ -40,6 +40,8 @@
 	--color-link-active: hsl(from var(--color-link) h s calc(l + 10));
 
 	--color-glow: #2dffc4b3;
+	--color-glow-soft: #38ebb8b3;
+	--color-glow-mute: #2ead808a;
 
 	--layout-gap: 2rem;
 

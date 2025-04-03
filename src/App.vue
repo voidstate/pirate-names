@@ -1,7 +1,6 @@
 <script setup>
 import PageHeader from '@/components/Page-Header.vue'
 import PageFooter from '@/components/Page-Footer.vue'
-import { ref, nextTick } from 'vue'
 </script>
 
 <script defer>

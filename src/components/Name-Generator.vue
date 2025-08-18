@@ -20,9 +20,24 @@ const getRandomElement = ( array ) =>
 	return array[ Math.floor( Math.random() * array.length ) ]
 }
 
+const animatingDeath = ref(false)
+
 const newName = ( event ) =>
 {
-	if ( event ) {
+    if ( event ) {
+        if (nameLog.length > 0) {
+            animatingDeath.value = true
+            setTimeout(() => {
+                animatingDeath.value = false
+                generateName()
+            }, 1000)
+        } else {
+            generateName()
+        }
+    }
+}
+
+function generateName() {
 
 		const randomTemplate = getRandomElement( templates )
 
@@ -38,7 +53,7 @@ const newName = ( event ) =>
 
 		// cause of death
 		let causeOfDeath = ''
-		if ( Math.random() < .33 ) {
+		if ( Math.random() < .4 ) {
 			causeOfDeath = 'eaten by ' + getRandomElement( eaters )
 
 		}
@@ -58,7 +73,6 @@ const newName = ( event ) =>
 		nameLogOutput = nameLogOutput.map( ( name, index ) => `<span class="log-${ index }">${ name }</span>` ).join( ', ' )
 
 	}
-}
 
 let nameLog, nameLogOutput
 nameLog = nameLogOutput = []
@@ -71,7 +85,7 @@ const name = ref( `What's me name then, cap'n?` )
 <template>
 	<div class="generator">
 		<div class="generator__name-container">
-			<div class="generator__name">
+			<div class="generator__name" :class="{ 'generator__btn--die-anim': animatingDeath }">
 				<span v-html="name"></span>
 			</div>
 			<div class="generator__btn">
@@ -126,6 +140,13 @@ const name = ref( `What's me name then, cap'n?` )
 .generator__btn--die:hover svg
 {
 	transform: rotate(360deg);
+}
+
+.generator__btn--die-anim {
+    transition: transform 1s ease-out,
+			opacity 1s ease-out;
+    transform: translateY(40px);
+    opacity: 0;
 }
 
 .generator__log

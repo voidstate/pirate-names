@@ -98,7 +98,6 @@ import PageFooter from '@/components/Page-Footer.vue'
 <style scoped>
 .app
 {
-
 	overflow: hidden;
 
 	.app__glow1,
@@ -118,7 +117,7 @@ import PageFooter from '@/components/Page-Footer.vue'
 		border-radius: 50%;
 		opacity: 0.3;
 		filter: blur(60px);
-		transition: all 5s ease;
+		transition: all 3s ease;
 		background-color: var(--color-glow-soft);
 	}
 

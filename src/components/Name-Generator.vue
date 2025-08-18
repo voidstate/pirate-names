@@ -76,10 +76,10 @@ const name = ref( `What's me name then, cap'n?` )
 			</div>
 			<div class="generator__btn">
 				<button @click="newName">
-					<span v-if="nameLog.length === 0" class="generator__btn--arrow">
+					<span v-if="nameLog.length === 0" class="generator__btn--arrow" title="Bring 'em aboard!'">
 						<ArrowIcon />
 					</span>
-					<span v-else class="generator__btn--die">
+					<span v-else class="generator__btn--die" title="Throw 'em overboard!">
 						<SkullIcon />
 					</span>
 				</button>

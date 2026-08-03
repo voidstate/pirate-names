@@ -32,3 +32,12 @@
 	}
 }
 
+@media (min-width: 425px) {
+	.generator__inspect-action {
+		flex-direction: row;
+	}
+
+	.generator__modal-card {
+    	margin: 0 2rem;
+	}
+}

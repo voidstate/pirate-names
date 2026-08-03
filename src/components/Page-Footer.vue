@@ -15,8 +15,8 @@
 			<RouterLink :to="{ name: 'about' }">About</RouterLink>
 		</span>
 		<span>|</span>
-		<span>
-			<a href="//github.com/voidstate/pirate-names"><GithubIcon class="footer-container__icon"/></a>
+		<span class="footer-container__icon">
+			<a href="//github.com/voidstate/pirate-names"><font-awesome-icon :icon="['fab', 'github']" /></a>
 		</span>
 	</div>
 </template>

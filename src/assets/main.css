@@ -13,17 +13,6 @@
 	box-shadow: 0 0 12rem 2rem var(--color-glow);
 }
 
-a {
-	text-decoration: none;
-	color: var(--color-link);
-	transition: 0.4s;
-}
-
-svg {
-	display: block;
-	vertical-align: middle;
-}
-
 @media (hover: hover) {
 	a:hover {
 		color: var(--color-link-active);
@@ -42,3 +31,4 @@ svg {
 		width: 100%;
 	}
 }
+

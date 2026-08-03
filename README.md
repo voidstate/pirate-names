@@ -1,94 +1,81 @@
 # Pirate Name Generator
 
-A simple app to learn Vue 3 - let's make pirate names!
+A very silly Vue 3 app that generates pirate names with a touch of dark humor. Don't like the random pirate? Just kill him off with a memorable cause of death and a new pirate will be press-ganged.
 
-<div id="readme-top"></a>
-# Pirate Name Generator
+## Demo
 
-A simple web app to calculate successes or failures for dice rolls when playing the Eclipse Phase 2 role-playing game.
+The app is published on GitHub Pages:
 
-### Built With
+https://voidstate.github.io/pirate-names/
 
-[![Vue][Vue.js]][Vue-url]
+## Features
 
-<p style="text-align:right">(<a href="#readme-top">back to top</a>)</p>
+- Generate random pirate names from themed templates
+- Mix adjectives, nouns, forenames, and surnames
+- Keep a short log of recently generated names
+- Simple, lightweight Vue 3 experience with Vite
 
-<!-- CONTRIBUTING -->
-## Contributing
+## Tech Stack
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+- Vue 3
+- Vue Router
+- Vite
+- ESLint / Prettier
 
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
+## Getting Started
 
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+### Prerequisites
 
-<p style="text-align:right">(<a href="#readme-top">back to top</a>)</p>
+- Node.js 20 or newer
+- npm
 
-### Top contributors:
+### Install dependencies
 
-<a href="https://github.com/voidstate/pirate-names/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=voidstate/pirate-names" alt="contrib.rocks image" />
-</a>
-
-<!-- LICENSE -->
-## License
-
-Distributed under the Unlicense. See `LICENSE.txt` for more information.
-
-<p style="text-align:right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- CONTACT -->
-## Contact
-
-Your Name - [@voidstate](https://twitter.com/voidstate) - rpg@voidstate.com
-
-Project Link: [https://github.com/voidstate/pirate-names](https://github.com/voidstate/pirate-names)
-
-<p style="text-align:right">(<a href="#readme-top">back to top</a>)</p>
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
+```bash
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+### Run locally
 
-```sh
+```bash
 npm run dev
 ```
 
-### Compile and Minify for Production
+Then open http://localhost:5173 in your browser.
 
-```sh
+### Build for production
+
+```bash
 npm run build
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+The production build will be generated in the `dist` directory.
 
-```sh
+### Lint the project
+
+```bash
 npm run lint
 ```
 
-### Deploy with [Codespaces](https://github.com/voidstate/pirate-names)
+## Deployment
 
-```sh
-npm run deploy
+This project is configured for deployment to GitHub Pages using GitHub Actions.
+
+When changes are pushed to the `main` branch, the workflow builds the app and publishes it automatically.
+
+## Project Structure
+
+```text
+src/
+  components/      # Vue components
+  data/            # JSON datasets for name generation
+  assets/          # Styles and static assets
 ```
 
-<p style="text-align:right">(<a href="#readme-top">back to top</a>)</p>
+## Contributing
 
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[Vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
-[Vue-url]: https://vuejs.org/
+Contributions are welcome. If you have ideas or improvements, feel free to open an issue or submit a pull request.
+
+## License
+
+This project is licensed under the Unlicense. See the [LICENSE](LICENSE) file for details.

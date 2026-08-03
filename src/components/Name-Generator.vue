@@ -78,7 +78,7 @@ let nameLog, nameLogOutput
 nameLog = nameLogOutput = []
 
 // no need for special `setup` hook with the Composition API.
-const name = ref( `What's me name then, cap'n?` )
+const name = ref( `What's me name then, Cap'n?` )
 
 </script>
 

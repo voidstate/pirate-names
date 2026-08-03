@@ -9,11 +9,16 @@ import adjectives from '../data/adjectives.json' with {type: 'json'}
 import nouns from '../data/nouns.json' with {type: 'json'}
 import forenames from '../data/forenames.json' with {type: 'json'}
 import surnames from '../data/surnames.json' with {type: 'json'}
+import titles from '../data/titles.json' with {type: 'json'}
 import deaths from '../data/deaths.json' with {type: 'json'}
 import eaters from '../data/eaters.json' with {type: 'json'}
-// also: places
+import places from '../data/places.json' with {type: 'json'}
 
 import templates from '../data/templates.json' with {type: 'json'}
+
+import { normalizeTemplateEntries, pickWeightedItem } from '../utils/weightedSelection'
+
+const templateEntries = normalizeTemplateEntries( templates )
 
 const getRandomElement = ( array ) =>
 {
@@ -39,7 +44,8 @@ const newName = ( event ) =>
 
 function generateName() {
 
-		const randomTemplate = getRandomElement( templates )
+		const selectedTemplate = pickWeightedItem( templateEntries )
+		const randomTemplate = selectedTemplate?.template ?? templateEntries[ 0 ]?.template ?? ''
 
 		const newName = randomTemplate
 			.replace( /%adjective%/, getRandomElement( adjectives ) )
@@ -48,6 +54,8 @@ function generateName() {
 			.replace( /%noun%/, getRandomElement( nouns ) ) // we can have 2 nouns
 			.replace( /%forename%/g, getRandomElement( forenames ) )
 			.replace( /%surname%/g, getRandomElement( surnames ) )
+			.replace( /%title%/g, getRandomElement( titles ) )
+			.replace( /%place%/g, getRandomElement( places ) )
 
 		name.value = newName
 

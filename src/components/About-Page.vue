@@ -3,11 +3,11 @@
 <template>
 
 	<div class="app__about">
-			<h2>About the Pirate Name Generator</h2>
+			<h2>What's this Pirate Name Generator all about, then?</h2>
 
-			<p>Prow scuttle parrel provost Sail ho shrouds spirits boom mizzenmast yardarm. Pinnace holystone mizzenmast quarter crow's nest nipperkin grog yardarm hempen halter furl. Swab barque interloper chantey doubloon starboard grog black jack gangway rutters.</p>
-			<p>Deadlights jack lad schooner scallywag dance the hempen jig carouser broadside cable strike colors. Bring a spring upon her cable holystone blow the man down spanker Shiver me timbers to go on account lookout wherry doubloon chase. Belay yo-ho-ho keelhaul squiffy black spot yardarm spyglass sheet transom heave to.</p>
-			<p>Trysail Sail ho Corsair red ensign hulk smartly boom jib rum gangway. Case shot Shiver me timbers gangplank crack Jennys tea cup ballast Blimey lee snow crow's nest rutters. Fluke jib scourge of the seven seas boatswain schooner gaff booty Jack Tar transom spirits.</p>
+			<p>As we all know, sometimes you just need a pirate, fast. Sure, you could ask one of those new-fangled LLMs but where's the fun in that? This little treasure trove of an app keeps things simple, by combining a hand-curated selection of piratey names and words together for your personal edification.</p>
+			<p>And now you have a pirate that you're happy with, why not see what shenanegans he gets up to in a roleplaying game? Maybe the wonderful <a href="https://www.limithron.com/pirateborg">Pirate Borg RPG</a>?</p>
+			<p><a href="https://www.limithron.com/pirateborg"><img src="/src/assets/images/bitmaps/pirate-borg/pirate-borg-compatible.png" alt="Pirate Borg" class="app__about-pirate-borg"></a></p>
 
 	</div>
 
@@ -17,7 +17,8 @@
 .app__about {
 	margin-top: 2rem;
 }
-h2{
+
+h2 {
 	font-size: 2rem;
 	line-height: 1.15;
 	margin-bottom: 1rem;
@@ -27,5 +28,12 @@ p {
 	font-size: 1.5rem;
 	margin-bottom: 1rem;
 	line-height: 1.5;
+}
+
+.app__about-pirate-borg {
+	height:auto;
+	max-width: 20rem;
+	margin: 0 auto;
+	padding-top: 3rem;
 }
 </style>

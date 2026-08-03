@@ -1,6 +1,6 @@
 <template>
 	<h1>
-		Pirate Name Generator
+		Cap'n Voidstate's Pirate Name Generator
 	</h1>
 </template>
 

@@ -153,8 +153,8 @@ const name = ref( 'A new pirate approaches...' )
 			<div class="generator__inspect-action">
 				<button class="generator__btn-button generator__btn-button--inspect" @click="openPirateModal" :title="hasGeneratedPirate ? 'Generate another pirate!' : 'Generate your first pirate!'">
 					<font-awesome-icon icon="coins" />
+					<span class="generator__inspect-label">Bring 'im aboard</span>
 				</button>
-				<span class="generator__inspect-label">Bring 'im aboard</span>
 			</div>
 		</div>
 
@@ -166,14 +166,14 @@ const name = ref( 'A new pirate approaches...' )
 					<div class="generator__modal-action">
 						<button class="generator__btn-button generator__modal-action-button generator__btn-button--recruit" title="Recruit" @click="recruitPirate">
 							<font-awesome-icon icon="anchor" />
+							<span class="generator__modal-action-label">Recruit</span>
 						</button>
-						<span class="generator__modal-action-label">Recruit</span>
 					</div>
 					<div class="generator__modal-action">
 						<button class="generator__btn-button generator__modal-action-button generator__btn-button--kill" title="Kill" @click="killPirate">
 							<font-awesome-icon icon="skull" />
+							<span class="generator__modal-action-label">Kill</span>
 						</button>
-						<span class="generator__modal-action-label">Kill</span>
 					</div>
 				</div>
 				<!-- <button class="generator__modal-close" @click="closeModal"><font-awesome-icon icon="xmark" /> Close</button> -->
@@ -201,7 +201,7 @@ const name = ref( 'A new pirate approaches...' )
 .generator__name-container
 {
 	display: grid;
-	grid-template-columns: 1fr min-content;
+	grid-template-columns: 1fr max-content;
 	justify-content: space-between;
 	align-items: center;
 	gap: 1rem;
@@ -209,11 +209,21 @@ const name = ref( 'A new pirate approaches...' )
 
 .generator__btn-button
 {
-	padding: .35rem .7rem;
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	padding: 1rem 1.5rem;
 	cursor: pointer;
-	background: transparent;
+	background-color: var(--color-button-bg);
 	color: var(--color-link);
+	border: .125rem solid var(--color-border);
+	border-radius: 1rem;
 	font-size: 3rem;
+	transition: background-color 0.3s ease;
+
+	&:hover {
+		background-color: var(--color-button-bg-hover);
+	}
 }
 
 .generator__modal-close
@@ -275,7 +285,8 @@ const name = ref( 'A new pirate approaches...' )
 	box-shadow: 0 0 2rem .5rem var(--color-glow);
 }
 
-.generator__modal-intro {
+.generator__modal-intro
+{
 	margin: 0 0 1rem;
 	font-size: 1.25rem;
 }
@@ -317,22 +328,12 @@ const name = ref( 'A new pirate approaches...' )
 	min-width: 3.25rem;
 }
 
-.generator__inspect-action
-{
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: .35rem;
-}
-
 .generator__inspect-label,
 .generator__modal-action-label
 {
-	opacity: 1;
-	visibility: visible;
 	transform: none;
 	font-size: 1.25rem;
-	font-weight: 600;
+	font-weight: bold;
 	color: var(--color-text-muted);
 	text-align: center;
 }

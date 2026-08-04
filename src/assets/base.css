@@ -26,6 +26,9 @@
 	--color-background-soft: var(--colour-palette-black-soft);
 	--color-background-mute: var(--colour-palette-black-mute);
 
+	--color-button-bg: var(--colour-palette-black-mute);
+	--color-button-bg-hover: var(--colour-palette-black);
+
 	--color-border: var(--colour-palette-divider-2);
 	--color-border-hover: var(--colour-palette-divider-1);
 

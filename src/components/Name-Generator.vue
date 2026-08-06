@@ -210,13 +210,17 @@ onMounted( () =>
 			const storedRecruited = JSON.parse( window.localStorage.getItem( RECRUITED_KEY ) || '[]' )
 			if ( Array.isArray( storedRecruited ) ) recruitedPirates.value = storedRecruited
 		}
-		catch ( e ) { }
+		catch ( e ) {
+			// fail silently
+		}
 
 		try {
 			const storedDead = JSON.parse( window.localStorage.getItem( DEAD_KEY ) || '[]' )
 			if ( Array.isArray( storedDead ) ) deadPirates.value = storedDead
 		}
-		catch ( e ) { }
+		catch ( e ) {
+			// fail silently
+		}
 
 		const last = window.localStorage.getItem( LAST_NAME_KEY )
 		if ( last ) {

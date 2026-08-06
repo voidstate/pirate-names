@@ -1,6 +1,6 @@
 <template>
 	<h1>
-		Cap'n Voidstate's Pirate Name Generator
+		Cap'n Voidstate's Pirate Crew Generator
 	</h1>
 </template>
 
@@ -8,10 +8,10 @@
 h1
 {
 	text-align: center;
-	font-size: 2rem;
-	font-family: "Trade Winds", serif;
-	font-weight: 400;
-	font-style: normal;
+	font-size: var(--font-size-header);
+	font-family: var(--font-family-header);
+	font-weight: var(--font-weight-header);
+	font-style: var(--font-style-header);
 	color: var(--color-text-grey);
 }
 </style>

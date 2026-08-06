@@ -11,7 +11,7 @@
     { "template": "%forename% Mc%surname%", "weight": 1 },
     { "template": "%forename% the %adjective%", "weight": 3 },
     { "template": "%forename% the %adjective% %noun%", "weight": 2 },
-    { "template": "%forename% the %noun%", "weight": 3 },
+    { "template": "%forename% the %noun%", "weight": 5 },
     { "template": "%forename% %noun%", "weight": 2 },
     { "template": "%forename% %surname% the %adjective% %noun%", "weight": 1 },
     { "template": "%adjective% %forename%", "weight": 7 },
@@ -28,5 +28,6 @@
     { "template": "%noun%less %forename%", "weight": 1 },
     { "template": "%title% %forename%", "weight": 3 },
     { "template": "%title% %surname%", "weight": 3 },
-    { "template": "%adjective% %place% %forename%", "weight": 3 }
+    { "template": "%adjective% %place% %forename%", "weight": 3 },
+    { "template": "%adjective% %place% %surname%", "weight": 3 }
 ]

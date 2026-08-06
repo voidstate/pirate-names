@@ -1,10 +1,11 @@
 <script setup>
 
-import { computed, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 
 import adjectives from '../data/adjectives.json' with { type: 'json' }
 import nouns from '../data/nouns.json' with { type: 'json' }
-import forenames from '../data/forenames.json' with { type: 'json' }
+import forenamesMale from '../data/forenames-male.json' with { type: 'json' }
+import forenamesFemale from '../data/forenames-female.json' with { type: 'json' }
 import surnames from '../data/surnames.json' with { type: 'json' }
 import titles from '../data/titles.json' with { type: 'json' }
 import deaths from '../data/deaths.json' with { type: 'json' }
@@ -16,11 +17,7 @@ import templates from '../data/templates.json' with { type: 'json' }
 import { normalizeTemplateEntries, pickWeightedItem } from '../utils/weightedSelection'
 
 const templateEntries = normalizeTemplateEntries( templates )
-
-const getRandomElement = ( array ) =>
-{
-	return array[ Math.floor( Math.random() * array.length ) ]
-}
+const preferenceOptions = [ 'male', 'female', 'any' ]
 
 const animatingDeath = ref( false )
 const deadPirates = ref( [] )
@@ -28,6 +25,31 @@ const recruitedPirates = ref( [] )
 const pendingPirate = ref( null )
 const isModalOpen = ref( false )
 const hasGeneratedPirate = ref( false )
+const selectedPreference = ref( 'male' )
+const nameEl = ref( null )
+
+const STORAGE_KEY = 'pirate-name-gender-preference'
+const RECRUITED_KEY = 'pirate-names-recruited'
+const DEAD_KEY = 'pirate-names-dead'
+const LAST_NAME_KEY = 'pirate-names-last'
+
+const getRandomElement = ( array ) =>
+{
+	return array[ Math.floor( Math.random() * array.length ) ]
+}
+
+const getForenames = () =>
+{
+	if ( selectedPreference.value === 'female' ) {
+		return forenamesFemale
+	}
+
+	if ( selectedPreference.value === 'any' ) {
+		return [ ...forenamesMale, ...forenamesMale, ...forenamesFemale ]
+	}
+
+	return forenamesMale
+}
 
 const deadPiratesOutput = computed( () =>
 {
@@ -74,6 +96,7 @@ const generatePirateName = () =>
 {
 	const selectedTemplate = pickWeightedItem( templateEntries )
 	const randomTemplate = selectedTemplate?.template ?? templateEntries[ 0 ]?.template ?? ''
+	const forenames = getForenames()
 
 	const generatedName = randomTemplate
 		.replace( /%adjective%/, getRandomElement( adjectives ) )
@@ -109,6 +132,8 @@ const recruitPirate = () =>
 
 	pendingPirate.value = null
 	isModalOpen.value = false
+	// trigger approach animation on main name display
+	triggerApproachAnimation( nameEl.value )
 }
 
 const killPirate = () =>
@@ -132,6 +157,28 @@ const killPirate = () =>
 
 	pendingPirate.value = null
 	isModalOpen.value = false
+	// trigger approach animation on main name display
+	triggerApproachAnimation( nameEl.value )
+}
+
+// helper to toggle the approach animation class
+const triggerApproachAnimation = ( el ) =>
+{
+	if ( !el ) return
+	el.classList.remove( 'animate-approach' )
+	// force reflow so re-adding the class restarts the animation
+	// eslint-disable-next-line @typescript-eslint/no-unused-expressions
+	void el.offsetWidth
+	el.classList.add( 'animate-approach' )
+	const onEnd = () => {
+		el.classList.remove( 'animate-approach' )
+		el.removeEventListener( 'animationend', onEnd )
+	}
+	el.addEventListener( 'animationend', onEnd )
+}
+
+const onNameClick = () => {
+	triggerApproachAnimation( nameEl.value )
 }
 
 const closeModal = () =>
@@ -142,24 +189,116 @@ const closeModal = () =>
 
 const name = ref( 'A new pirate approaches...' )
 
+const loadPreference = () =>
+{
+	if ( typeof window === 'undefined' ) {
+		return 'male'
+	}
+
+	const storedPreference = window.localStorage.getItem( STORAGE_KEY )
+	return storedPreference && preferenceOptions.includes( storedPreference )
+		? storedPreference
+		: 'male'
+}
+
+onMounted( () =>
+{
+	selectedPreference.value = loadPreference()
+
+	if ( typeof window !== 'undefined' ) {
+		try {
+			const storedRecruited = JSON.parse( window.localStorage.getItem( RECRUITED_KEY ) || '[]' )
+			if ( Array.isArray( storedRecruited ) ) recruitedPirates.value = storedRecruited
+		}
+		catch ( e ) { }
+
+		try {
+			const storedDead = JSON.parse( window.localStorage.getItem( DEAD_KEY ) || '[]' )
+			if ( Array.isArray( storedDead ) ) deadPirates.value = storedDead
+		}
+		catch ( e ) { }
+
+		const last = window.localStorage.getItem( LAST_NAME_KEY )
+		if ( last ) {
+			name.value = last
+			hasGeneratedPirate.value = true
+		}
+	}
+} )
+
+// Listen for a global reset event so the options page can clear recruits/rejected
+const handlePiratesReset = () =>
+{
+	recruitedPirates.value = []
+	deadPirates.value = []
+
+ 	if ( typeof window !== 'undefined' ) {
+ 		window.localStorage.removeItem( RECRUITED_KEY )
+ 		window.localStorage.removeItem( DEAD_KEY )
+ 	}
+}
+
+window.addEventListener( 'piratesReset', handlePiratesReset )
+
+onUnmounted( () => {
+ 	window.removeEventListener( 'piratesReset', handlePiratesReset )
+} )
+
+watch( recruitedPirates, ( val ) =>
+{
+	if ( typeof window !== 'undefined' ) {
+		window.localStorage.setItem( RECRUITED_KEY, JSON.stringify( val || [] ) )
+	}
+}, { deep: true } )
+
+watch( deadPirates, ( val ) =>
+{
+	if ( typeof window !== 'undefined' ) {
+		window.localStorage.setItem( DEAD_KEY, JSON.stringify( val || [] ) )
+	}
+}, { deep: true } )
+
+watch( name, ( val ) =>
+{
+	if ( typeof window !== 'undefined' ) {
+		window.localStorage.setItem( LAST_NAME_KEY, val || '' )
+	}
+} )
+
+const inspectLabel = computed( () =>
+{
+	if ( selectedPreference.value === 'female' ) {
+		return "Bring 'er aboard"
+	}
+
+	if ( selectedPreference.value === 'any' ) {
+		return "Bring 'em aboard"
+	}
+
+	return "Bring 'im aboard"
+} )
+
 </script>
 
 <template>
 	<div class="generator">
 		<div class="generator__name-container">
-			<div class="generator__name" :class="{ 'generator__btn--die-anim': animatingDeath }">
+			<div class="generator__name" ref="nameEl" @click="onNameClick" :class="{ 'generator__btn--die-anim': animatingDeath }">
 				<span v-html="name"></span>
 			</div>
-			<div class="generator__inspect-action">
-				<button class="generator__btn-button generator__btn-button--inspect" @click="openPirateModal" :title="hasGeneratedPirate ? 'Generate another pirate!' : 'Generate your first pirate!'">
-					<font-awesome-icon icon="coins" />
-					<span class="generator__inspect-label">Bring 'im aboard</span>
-				</button>
+			<div class="generator__actions">
+				<div class="generator__inspect-action">
+					<button class="generator__btn-button generator__btn-button--inspect" @click="openPirateModal" :title="hasGeneratedPirate ? 'Generate another pirate!' : 'Generate your first pirate!'">
+						<font-awesome-icon icon="coins" />
+						<span class="generator__inspect-label">{{ inspectLabel }}</span>
+					</button>
+				</div>
 			</div>
 		</div>
 
 		<div v-if="isModalOpen" class="generator__modal" role="dialog" aria-modal="true">
 			<div class="generator__modal-card">
+				<div class="generator__modal-close-icon" @click="closeModal"><font-awesome-icon icon="circle-xmark" /></div>
 				<p class="generator__modal-intro">Ahoy there, my name is...</p>
 				<p class="generator__modal-title">{{ pendingPirate }}</p>
 				<div class="generator__modal-actions">
@@ -172,7 +311,7 @@ const name = ref( 'A new pirate approaches...' )
 					<div class="generator__modal-action">
 						<button class="generator__btn-button generator__modal-action-button generator__btn-button--kill" title="Kill" @click="killPirate">
 							<font-awesome-icon icon="skull" />
-							<span class="generator__modal-action-label">Kill</span>
+							<span class="generator__modal-action-label">Reject</span>
 						</button>
 					</div>
 				</div>
@@ -182,12 +321,12 @@ const name = ref( 'A new pirate approaches...' )
 
 		<div class="generator__factoid"></div>
 		<div v-if="recruitedPiratesOutput.length" class="generator__log generator__log--recruited">
-			<div class="generator__log-title">Recruited pirates</div>
-			<div v-html="recruitedPiratesOutput"></div>
+			<h3 class="generator__log-title">Recruited pirates</h3>
+			<p v-html="recruitedPiratesOutput"></p>
 		</div>
 		<div v-if="deadPiratesOutput.length" class="generator__log">
-			<div class="generator__log-title">Dead pirates</div>
-			<div v-html="deadPiratesOutput"></div>
+			<h3 class="generator__log-title">Rejected pirates</h3>
+			<p v-html="deadPiratesOutput"></p>
 		</div>
 	</div>
 </template>
@@ -195,6 +334,7 @@ const name = ref( 'A new pirate approaches...' )
 <style>
 .generator
 {
+	font-family: var(--font-family-body);
 	margin-top: 2rem;
 }
 
@@ -205,6 +345,42 @@ const name = ref( 'A new pirate approaches...' )
 	justify-content: space-between;
 	align-items: center;
 	gap: 1rem;
+	overflow: visible;
+}
+
+.generator__name {
+	font-size: var(--font-size-title);
+	display: inline-block;
+	overflow: visible;
+	will-change: transform, opacity;
+}
+
+.generator__name.animate-approach {
+	display: inline-block;
+	transform-origin: center bottom;
+	position: relative;
+	z-index: 10;
+	animation: approach-and-sway 900ms cubic-bezier(.22,1.15,.35,1.02) both;
+}
+
+.generator__actions
+{
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: 0.75rem;
+}
+
+.generator__options-link
+{
+	font-weight: 700;
+	color: var(--color-link);
+	text-decoration: none;
+}
+
+.generator__options-link:hover
+{
+	text-decoration: underline;
 }
 
 .generator__btn-button
@@ -216,29 +392,15 @@ const name = ref( 'A new pirate approaches...' )
 	cursor: pointer;
 	background-color: var(--color-button-bg);
 	color: var(--color-link);
-	border: .125rem solid var(--color-border);
-	border-radius: 1rem;
-	font-size: 3rem;
+	border: var(--border-width) solid var(--color-border);
+	border-radius: var(--border-radius);
+	font-size: var(--font-size-button);
 	transition: background-color 0.3s ease;
 
-	&:hover {
+	&:hover
+	{
 		background-color: var(--color-button-bg-hover);
 	}
-}
-
-.generator__modal-close
-{
-	display: inline-flex;
-	align-items: center;
-	gap: .35rem;
-	padding: .35rem 1rem;
-	cursor: pointer;
-	border: .15rem solid var(--color-border);
-	border-radius: 1rem;
-	background: transparent;
-	color: var(--color-link);
-	font-size: 1.5rem;
-	font-weight: bold;
 }
 
 .generator__btn-button :is(svg, path)
@@ -275,9 +437,10 @@ const name = ref( 'A new pirate approaches...' )
 
 .generator__modal-card
 {
+	position: relative;
 	background-color: var(--color-background-soft);
-	border: .25rem solid var(--color-border);
-	border-radius: 1rem;
+	border: var(--border-width) solid var(--color-border);
+	border-radius: var(--border-radius);
 	padding: 1.5rem;
 	max-width: 36rem;
 	width: 100%;
@@ -285,22 +448,34 @@ const name = ref( 'A new pirate approaches...' )
 	box-shadow: 0 0 2rem .5rem var(--color-glow);
 }
 
+.generator__modal-close-icon {
+	position: absolute;
+	top: .5rem;
+	right: .5rem;
+	cursor: pointer;
+	color: var(--color-glow);
+
+	&:hover {
+		color: var(--color-glow-mute);
+	}
+}
+
 .generator__modal-intro
 {
 	margin: 0 0 1rem;
-	font-size: 1.25rem;
+	font-size: var(--font-size-body);
 }
 
 .generator__modal-title
 {
 	margin: 0 0 2rem;
-	font-weight: bold;
+	font-size: var(--font-size-title);
 }
 
 .generator__modal-name
 {
 	margin: 0 0 1rem;
-	font-size: 1.25rem;
+	font-size: var(--font-size-body);
 	color: var(--color-text-grey);
 }
 
@@ -332,7 +507,7 @@ const name = ref( 'A new pirate approaches...' )
 .generator__modal-action-label
 {
 	transform: none;
-	font-size: 1.25rem;
+	font-size: var(--font-size-subtitle);
 	font-weight: bold;
 	color: var(--color-text-muted);
 	text-align: center;
@@ -342,15 +517,15 @@ const name = ref( 'A new pirate approaches...' )
 {
 	margin-top: 1.5rem;
 	border-top: 1px solid var(--color-border);
-	padding: 1rem 0;
+	padding: 1rem 0 0 0;
 	text-align: left;
-	font-size: 70%;
+	font-size: var(--font-size-body);
 	color: var(--color-text-muted);
 }
 
 .generator__log-title
 {
-	font-weight: bold;
+	font-size: var(--font-size-subtitle);
 	margin-bottom: .5rem;
 	color: var(--color-text-grey);
 }
@@ -370,5 +545,39 @@ const name = ref( 'A new pirate approaches...' )
 .generator__log span
 {
 	color: var(--color-text-greyest);
+}
+
+@media (max-width: 768px)
+{
+	.generator__name-container
+	{
+		display: flex;
+		flex-direction: column;
+	}
+
+	.generator__modal-card
+	{
+		margin: 0 2rem;
+	}
+}
+
+/* Small fade/scale animation for modal appearance */
+.generator__modal {
+	animation: modal-fade 180ms ease-out;
+}
+
+.generator__modal-card {
+	animation: modal-pop 220ms cubic-bezier(0.2, 0.9, 0.25, 1);
+	transform-origin: center top;
+}
+
+@keyframes modal-fade {
+	from { opacity: 0 }
+ 	to { opacity: 1 }
+}
+
+@keyframes modal-pop {
+ 	from { transform: translateY(8px) scale(0.985); opacity: 0 }
+ 	to { transform: translateY(0) scale(1); opacity: 1 }
 }
 </style>

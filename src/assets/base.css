@@ -45,25 +45,77 @@
 	--color-glow: #2dffc4b3;
 	--color-glow-soft: #38ebb8b3;
 	--color-glow-mute: #2ead808a;
-
-	--layout-gap: 2rem;
-
-	--layout-border-width: 0.125rem;
 }
 
-body {
-	min-height: 100vh;
-	color: var(--color-text);
-	background-color: var(--color-background);
-	transition:
-		color 0.5s,
-		background-color 0.5s;
-	line-height: 1.6;
-	font-family: 'Quintessential', serif;
-	font-weight: 400;
-	font-style: normal;
-	font-size: clamp(14px, 5vw, 32px);
-	text-rendering: optimizeLegibility;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
+/* layout variables */
+:root {
+	--gap: 2rem;
+	--border-radius: 1rem;
+	--border-width: 0.125rem;
+	--button-padding: 1rem 1.5rem;
+}
+
+/* font styles */
+:root {
+	--font-family-header: "Trade Winds", serif;
+	--font-weight-header: 400;
+	--font-style-header: normal;
+	
+	--font-family-default: "Quintessential", serif;
+	--font-weight-default: 400;
+	--font-style-default: normal;
+	--line-height-default: 1.15;
+	
+	--font-size-header: 2rem;
+
+	--font-size-title: 2.25rem;
+	--margin-bottom-title: 1rem;
+
+	--font-size-subtitle: 1.75rem;
+	--margin-bottom-subtitle: 1rem;
+
+	--font-size-body: 1.25rem;
+	--margin-bottom-body: 1rem;
+
+	--font-size-footer: 1.125rem;
+	--line-height-footer: 1;
+
+	--font-size-button: 1.75rem;
+	--line-height-button: 1;
+}
+
+/* animation for recruited/rejected pirate name */
+@keyframes approach-and-sway {
+	0% {
+		transform: scale(0.7) translate(66px, 0) rotate(0deg) skew(0deg, 0deg);
+		opacity: 0.55;
+	}
+	18% {
+		transform: scale(0.96) translate(23px, -5px) rotate(-3deg) skew(-1deg, 1deg);
+		opacity: 0.92;
+	}
+	34% {
+		transform: scale(1.03) translate(46px, 5px) rotate(4deg) skew(2deg, -1deg);
+		opacity: 0.97;
+	}
+	48% {
+		transform: scale(0.98) translate(14px, -2px) rotate(-2deg) skew(-1.5deg, 0.8deg);
+		opacity: 0.985;
+	}
+	62% {
+		transform: scale(1.02) translate(11px, 4px) rotate(2deg) skew(1deg, -0.8deg);
+		opacity: 0.993;
+	}
+	76% {
+		transform: scale(1) translate(8px, -1px) rotate(-1deg) skew(-0.6deg, 0.4deg);
+		opacity: 0.998;
+	}
+	90% {
+		transform: scale(0.995) translate(-1px, 1px) rotate(0.6deg) skew(0.3deg, -0.2deg);
+		opacity: 0.999;
+	}
+	100% {
+		transform: scale(1) translate(0, 0) rotate(0deg) skew(0deg, 0deg);
+		opacity: 1;
+	}
 }

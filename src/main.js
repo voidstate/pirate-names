@@ -14,6 +14,8 @@ import
 
 import
 	{
+		faArrowLeft,
+		faCircleXmark,
 		faCoins,
 		faHand,
 		faXmark,
@@ -22,6 +24,8 @@ import
 	} from '@fortawesome/free-solid-svg-icons'
 
 library.add(
+	faArrowLeft,
+	faCircleXmark,
 	faCoins,
 	faHand,
 	faXmark,

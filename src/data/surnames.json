@@ -1,4 +1,5 @@
-[
+{
+  "english": [
     "Adams",
     "Allen",
     "Aubrey",
@@ -16,7 +17,6 @@
     "Boyle",
     "Cooke",
     "Cookham",
-    "Cunningham",
     "Browne",
     "Catchpole",
     "Cooke",
@@ -24,7 +24,6 @@
     "Davis",
     "de Vere",
     "Drake",
-    "Duval",
     "Edwards",
     "Easton",
     "England",
@@ -52,7 +51,6 @@
     "Hooke",
     "Hudson",
     "Kidd",
-    "Keane",
     "Jackson",
     "Johnson",
     "Jones",
@@ -68,7 +66,6 @@
     "Lucifer",
     "Lowe",
     "Lynche",
-    "Magilligan",
     "Marsh",
     "Morgan",
     "Newman",
@@ -76,7 +73,6 @@
     "North",
     "Pew",
     "Philpott",
-    "Plunkett",
     "Portland",
     "Pugwash",
     "Rackham",
@@ -93,7 +89,6 @@
     "Teach",
     "Thorne",
     "Trelawny",
-    "Van Demon",
     "Vane",
     "Wapping",
     "Ward",
@@ -102,4 +97,21 @@
     "White",
     "Woolfe",
     "Wormwood"
-]
+  ],
+  "french": [
+    "Duval"
+  ],
+  "spanish": [
+    "de la Cruz",
+    "Mendoza",
+    "Santiago",
+    "Torres"
+  ],
+  "other": [
+    "Cunningham",
+    "Keane",
+    "Magilligan",
+    "Plunkett",
+    "Van Demon"
+  ]
+}

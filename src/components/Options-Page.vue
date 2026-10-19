@@ -3,13 +3,21 @@ import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const STORAGE_KEY = 'pirate-name-gender-preference'
+const NATIONALITY_STORAGE_KEY = 'pirate-name-nationality-preference'
 const preferenceOptions = [
 	{ value: 'male', label: 'Just Lads' },
 	{ value: 'female', label: 'Just Lasses' },
 	{ value: 'any', label: 'I\'ll take anyone!' },
 ]
+const nationalityOptions = [
+	{ value: 'english', label: 'English' },
+	{ value: 'french', label: 'French' },
+	{ value: 'spanish', label: 'Spanish' },
+	{ value: 'any', label: 'Any' },
+]
 
 const selectedPreference = ref( 'male' )
+const selectedNationality = ref( 'any' )
 
 const RECRUITED_KEY = 'pirate-names-recruited'
 const DEAD_KEY = 'pirate-names-dead'
@@ -60,6 +68,18 @@ const loadPreference = () =>
 		: 'male'
 }
 
+const loadNationalityPreference = () =>
+{
+	if ( typeof window === 'undefined' ) {
+		return 'any'
+	}
+
+	const storedPreference = window.localStorage.getItem( NATIONALITY_STORAGE_KEY )
+	return storedPreference && nationalityOptions.some( ( option ) => option.value === storedPreference )
+		? storedPreference
+		: 'any'
+}
+
 const savePreference = ( value ) =>
 {
 	selectedPreference.value = value
@@ -69,9 +89,19 @@ const savePreference = ( value ) =>
 	}
 }
 
+const saveNationalityPreference = ( value ) =>
+{
+	selectedNationality.value = value
+
+	if ( typeof window !== 'undefined' ) {
+		window.localStorage.setItem( NATIONALITY_STORAGE_KEY, value )
+	}
+}
+
 onMounted( () =>
 {
 	selectedPreference.value = loadPreference()
+	selectedNationality.value = loadNationalityPreference()
 } )
 </script>
 
@@ -84,6 +114,20 @@ onMounted( () =>
 				<div v-for="option in preferenceOptions" :key="option.value" class="options-page__option">
 					<input type="radio" :name="STORAGE_KEY" :id="`preference-${option.value}`" :value="option.value" v-model="selectedPreference" class="options-page__input" @change="savePreference(option.value)" />
 					<label :for="`preference-${option.value}`" class="options-page__button" :class="{ 'options-page__button--active': selectedPreference === option.value }">
+						{{ option.label }}
+					</label>
+				</div>
+			</div>
+		</fieldset>
+
+		<h2>What nationality should yer crew be?</h2>
+
+		<fieldset class="options-page__fieldset">
+			<legend class="options-page__legend">Choose a name nationality</legend>
+			<div class="options-page__options options-page__options--horizontal">
+				<div v-for="option in nationalityOptions" :key="option.value" class="options-page__option">
+					<input type="radio" :name="NATIONALITY_STORAGE_KEY" :id="`nationality-${option.value}`" :value="option.value" v-model="selectedNationality" class="options-page__input" @change="saveNationalityPreference(option.value)" />
+					<label :for="`nationality-${option.value}`" class="options-page__button" :class="{ 'options-page__button--active': selectedNationality === option.value }">
 						{{ option.label }}
 					</label>
 				</div>
@@ -146,6 +190,11 @@ h2 {
 	gap: 1rem;
 }
 
+.options-page__options--horizontal
+{
+	flex-wrap: nowrap;
+}
+
 .options-page__option
 {
 	display: flex;
@@ -188,6 +237,32 @@ h2 {
 	background-color: var(--color-link);
 	color: var(--color-button-bg);
 	border-color: var(--color-link);
+}
+
+.options-page__legend
+{
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+@media (max-width: 30rem)
+{
+	.options-page__options--horizontal
+	{
+		gap: 0.5rem;
+	}
+
+	.options-page__options--horizontal .options-page__button
+	{
+		padding: var(--space-1);
+	}
 }
 
 .options-page__modal

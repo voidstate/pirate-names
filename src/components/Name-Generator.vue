@@ -4,8 +4,7 @@ import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 
 import adjectives from '../data/adjectives.json' with { type: 'json' }
 import nouns from '../data/nouns.json' with { type: 'json' }
-import forenamesMale from '../data/forenames-male.json' with { type: 'json' }
-import forenamesFemale from '../data/forenames-female.json' with { type: 'json' }
+import forenames from '../data/forenames.json' with { type: 'json' }
 import surnames from '../data/surnames.json' with { type: 'json' }
 import titles from '../data/titles.json' with { type: 'json' }
 import deaths from '../data/deaths.json' with { type: 'json' }
@@ -18,6 +17,8 @@ import { normalizeTemplateEntries, pickWeightedItem } from '../utils/weightedSel
 
 const templateEntries = normalizeTemplateEntries( templates )
 const preferenceOptions = [ 'male', 'female', 'any' ]
+const nationalityOptions = [ 'english', 'french', 'spanish', 'other' ]
+const nationalityPreferenceOptions = [ ...nationalityOptions, 'any' ]
 const RECRUIT_FADE_DURATION_MS = 250
 const RECRUIT_FADE_OVERLAP_MS = 75
 
@@ -30,9 +31,11 @@ const isShipfulModalOpen = ref( false )
 const shipfulCount = ref( 10 )
 const hasGeneratedPirate = ref( false )
 const selectedPreference = ref( 'male' )
+const selectedNationality = ref( 'any' )
 const nameEl = ref( null )
 
 const STORAGE_KEY = 'pirate-name-gender-preference'
+const NATIONALITY_STORAGE_KEY = 'pirate-name-nationality-preference'
 const RECRUITED_KEY = 'pirate-names-recruited'
 const DEAD_KEY = 'pirate-names-dead'
 const LAST_NAME_KEY = 'pirate-names-last'
@@ -48,17 +51,33 @@ const getRandomElement = ( array ) =>
 	return array[ Math.floor( Math.random() * array.length ) ]
 }
 
+const getSelectedNationalities = () =>
+{
+	return selectedNationality.value === 'any'
+		? nationalityOptions
+		: [ selectedNationality.value ]
+}
+
 const getForenames = () =>
 {
+	const selectedNationalities = getSelectedNationalities()
+	const maleForenames = selectedNationalities.flatMap( ( nationality ) => forenames[ nationality ].male )
+	const femaleForenames = selectedNationalities.flatMap( ( nationality ) => forenames[ nationality ].female )
+
 	if ( selectedPreference.value === 'female' ) {
-		return forenamesFemale
+		return femaleForenames
 	}
 
 	if ( selectedPreference.value === 'any' ) {
-		return [ ...forenamesMale, ...forenamesMale, ...forenamesFemale ]
+		return [ ...maleForenames, ...maleForenames, ...femaleForenames ]
 	}
 
-	return forenamesMale
+	return maleForenames
+}
+
+const getSurnames = () =>
+{
+	return getSelectedNationalities().flatMap( ( nationality ) => surnames[ nationality ] )
 }
 
 const deadPiratesOutput = computed( () =>
@@ -71,6 +90,13 @@ const deadPiratesOutput = computed( () =>
 		.slice( 0, 10 )
 		.map( ( pirate, index ) => `<span class="log-${ index }">${ pirate }</span>` )
 		.join( ', ' )
+} )
+
+watch( selectedNationality, ( value ) =>
+{
+	if ( typeof window !== 'undefined' ) {
+		window.localStorage.setItem( NATIONALITY_STORAGE_KEY, value )
+	}
 } )
 
 const decodeHtmlEntities = ( value ) =>
@@ -95,6 +121,7 @@ const generatePirateName = () =>
 	const selectedTemplate = pickWeightedItem( templateEntries )
 	const randomTemplate = selectedTemplate?.template ?? templateEntries[ 0 ]?.template ?? ''
 	const forenames = getForenames()
+	const selectedSurnames = getSurnames()
 
 	const generatedName = randomTemplate
 		.replace( /%adjective%/, getRandomElement( adjectives ) )
@@ -102,7 +129,7 @@ const generatePirateName = () =>
 		.replace( /%noun%/, getRandomElement( nouns ) )
 		.replace( /%noun%/, getRandomElement( nouns ) )
 		.replace( /%forename%/g, getRandomElement( forenames ) )
-		.replace( /%surname%/g, getRandomElement( surnames ) )
+		.replace( /%surname%/g, getRandomElement( selectedSurnames ) )
 		.replace( /%title%/g, getRandomElement( titles ) )
 		.replace( /%place%/g, getRandomElement( places ) )
 
@@ -239,9 +266,22 @@ const loadPreference = () =>
 		: 'male'
 }
 
+const loadNationalityPreference = () =>
+{
+	if ( typeof window === 'undefined' ) {
+		return 'any'
+	}
+
+	const storedPreference = window.localStorage.getItem( NATIONALITY_STORAGE_KEY )
+	return storedPreference && nationalityPreferenceOptions.includes( storedPreference )
+		? storedPreference
+		: 'any'
+}
+
 onMounted( () =>
 {
 	selectedPreference.value = loadPreference()
+	selectedNationality.value = loadNationalityPreference()
 
 	if ( typeof window !== 'undefined' ) {
 		try {

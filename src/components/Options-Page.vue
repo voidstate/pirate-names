@@ -124,7 +124,7 @@ onMounted( () =>
 
 		<fieldset class="options-page__fieldset">
 			<legend class="options-page__legend">Choose a name nationality</legend>
-			<div class="options-page__options options-page__options--horizontal">
+			<div class="options-page__options">
 				<div v-for="option in nationalityOptions" :key="option.value" class="options-page__option">
 					<input type="radio" :name="NATIONALITY_STORAGE_KEY" :id="`nationality-${option.value}`" :value="option.value" v-model="selectedNationality" class="options-page__input" @change="saveNationalityPreference(option.value)" />
 					<label :for="`nationality-${option.value}`" class="options-page__button" :class="{ 'options-page__button--active': selectedNationality === option.value }">
@@ -190,11 +190,6 @@ h2 {
 	gap: 1rem;
 }
 
-.options-page__options--horizontal
-{
-	flex-wrap: nowrap;
-}
-
 .options-page__option
 {
 	display: flex;
@@ -250,19 +245,6 @@ h2 {
 	clip: rect(0, 0, 0, 0);
 	white-space: nowrap;
 	border: 0;
-}
-
-@media (max-width: 30rem)
-{
-	.options-page__options--horizontal
-	{
-		gap: 0.5rem;
-	}
-
-	.options-page__options--horizontal .options-page__button
-	{
-		padding: var(--space-1);
-	}
 }
 
 .options-page__modal

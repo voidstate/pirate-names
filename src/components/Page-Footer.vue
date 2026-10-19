@@ -11,7 +11,7 @@ const currentRouteName = computed( () => route.name )
 		<span>
 			web app by <a href="//voidstate.com/rpg">voidstate</a>
 		</span>
-		<span>|</span>
+		<span class="footer__separator">|</span>
 		<span>
 			<template v-if="currentRouteName === 'main'">
 				<span class="footer__current">Recruit</span>
@@ -20,11 +20,11 @@ const currentRouteName = computed( () => route.name )
 				<RouterLink :to="{ name: 'main' }">Recruit</RouterLink>
 			</template>
 		</span>
-		<span>|</span>
+		<span class="footer__separator">|</span>
 		<span>
 			<RouterLink :to="{ name: 'main', query: { recruit: 'shipful' } }">Recruit a Shipful</RouterLink>
 		</span>
-		<span>|</span>
+		<span class="footer__separator">|</span>
 		<span>
 			<template v-if="currentRouteName === 'options'">
 				<span class="footer__current">Options</span>
@@ -33,7 +33,7 @@ const currentRouteName = computed( () => route.name )
 				<RouterLink :to="{ name: 'options' }">Options</RouterLink>
 			</template>
 		</span>
-		<span>|</span>
+		<span class="footer__separator">|</span>
 		<span>
 			<template v-if="currentRouteName === 'about'">
 				<span class="footer__current">About</span>
@@ -42,7 +42,7 @@ const currentRouteName = computed( () => route.name )
 				<RouterLink :to="{ name: 'about' }">About</RouterLink>
 			</template>
 		</span>
-		<span>|</span>
+		<span class="footer__separator">|</span>
 		<span class="footer__icon">
 			<a href="//github.com/voidstate/pirate-names"><font-awesome-icon :icon="['fab', 'github']" /></a>
 		</span>
@@ -94,5 +94,17 @@ footer
 			fill: var(--color-link-active);
 		}
 	}
+}
+
+@media (max-width:768px) {
+	footer {
+	& > div {
+		flex-direction: column;
+	}
+
+	.footer__separator {
+		display: none;
+	}
+}
 }
 </style>

@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+
 const route = useRoute()
 const currentRouteName = computed( () => route.name )
 </script>
@@ -13,11 +14,15 @@ const currentRouteName = computed( () => route.name )
 		<span>|</span>
 		<span>
 			<template v-if="currentRouteName === 'main'">
-				<span class="footer__current">Home</span>
+				<span class="footer__current">Recruit</span>
 			</template>
 			<template v-else>
-				<RouterLink :to="{ name: 'main' }">Home</RouterLink>
+				<RouterLink :to="{ name: 'main' }">Recruit</RouterLink>
 			</template>
+		</span>
+		<span>|</span>
+		<span>
+			<RouterLink :to="{ name: 'main', query: { recruit: 'shipful' } }">Recruit a Shipful</RouterLink>
 		</span>
 		<span>|</span>
 		<span>
@@ -49,7 +54,7 @@ footer
 {
 	margin-top: 4rem;
 	border-top: 1px solid var(--color-border);
-	padding: 1rem .5rem;
+	padding: var(--space-2) var(--space-1);
 	text-align: right;
 	font-size: var(--font-size-footer);
 	color: var(--color-text-muted);

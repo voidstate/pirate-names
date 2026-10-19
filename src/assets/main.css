@@ -21,7 +21,7 @@ body {
 .app {
 	max-width: 1024px;
 	margin: 1rem;
-	padding: 2rem;
+	padding: var(--space-4);
 	font-weight: normal;
 	border: var(--border-width) solid var(--color-border);
 	border-radius: var(--border-radius);
@@ -66,7 +66,7 @@ button, button span {
 	}
 
 	.app {
-		padding: 2rem 4rem 0;
+		padding: var(--space-4) var(--space-8) 0;
 		width: 100%;
 	}
 }

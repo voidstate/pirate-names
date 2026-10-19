@@ -25,6 +25,6 @@
 	height:auto;
 	max-width: 20rem;
 	margin: 0 auto;
-	padding-top: 3rem;
+	padding-top: var(--space-6);
 }
 </style>

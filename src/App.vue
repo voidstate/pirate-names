@@ -109,11 +109,6 @@ onBeforeUnmount( () =>
 	position: relative;
 }
 
-.app__wrapper
-{
-	overflow: hidden;
-}
-
 .app__glow1,
 .app__glow2,
 .app__glow3,

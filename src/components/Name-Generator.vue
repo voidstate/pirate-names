@@ -18,12 +18,16 @@ import { normalizeTemplateEntries, pickWeightedItem } from '../utils/weightedSel
 
 const templateEntries = normalizeTemplateEntries( templates )
 const preferenceOptions = [ 'male', 'female', 'any' ]
+const RECRUIT_FADE_DURATION_MS = 250
+const RECRUIT_FADE_OVERLAP_MS = 75
 
 const animatingDeath = ref( false )
 const deadPirates = ref( [] )
 const recruitedPirates = ref( [] )
 const pendingPirate = ref( null )
 const isModalOpen = ref( false )
+const isShipfulModalOpen = ref( false )
+const shipfulCount = ref( 10 )
 const hasGeneratedPirate = ref( false )
 const selectedPreference = ref( 'male' )
 const nameEl = ref( null )
@@ -32,6 +36,12 @@ const STORAGE_KEY = 'pirate-name-gender-preference'
 const RECRUITED_KEY = 'pirate-names-recruited'
 const DEAD_KEY = 'pirate-names-dead'
 const LAST_NAME_KEY = 'pirate-names-last'
+let nextRecruitedPirateId = 0
+
+const createRecruitedPirate = ( name, fadeDelay = 0 ) =>
+{
+	return { id: nextRecruitedPirateId++, name, fadeDelay }
+}
 
 const getRandomElement = ( array ) =>
 {
@@ -60,18 +70,6 @@ const deadPiratesOutput = computed( () =>
 	return deadPirates.value
 		.slice( 0, 10 )
 		.map( ( pirate, index ) => `<span class="log-${ index }">${ pirate }</span>` )
-		.join( ', ' )
-} )
-
-const recruitedPiratesOutput = computed( () =>
-{
-	if ( !recruitedPirates.value.length ) {
-		return ''
-	}
-
-	return recruitedPirates.value
-		.slice( 0, 10 )
-		.map( ( pirate, index ) => `<span class="recruit-${ index }">${ pirate }</span>` )
 		.join( ', ' )
 } )
 
@@ -119,21 +117,59 @@ const openPirateModal = () =>
 	hasGeneratedPirate.value = true
 }
 
+const openShipfulModal = () =>
+{
+	shipfulCount.value = 10
+	isShipfulModalOpen.value = true
+}
+
 const recruitPirate = () =>
 {
 	if ( !pendingPirate.value ) {
 		return
 	}
 
-	recruitedPirates.value.unshift( pendingPirate.value )
-	if ( recruitedPirates.value.length > 10 ) {
-		recruitedPirates.value.pop()
-	}
+	recruitedPirates.value.unshift( createRecruitedPirate( pendingPirate.value ) )
 
 	pendingPirate.value = null
 	isModalOpen.value = false
 	// trigger approach animation on main name display
 	triggerApproachAnimation( nameEl.value )
+}
+
+const isShipfulCountValid = computed( () =>
+	Number.isInteger( shipfulCount.value ) && shipfulCount.value >= 1 && shipfulCount.value <= 99
+)
+
+const recruitShipful = () =>
+{
+	if ( !isShipfulCountValid.value ) {
+		return
+	}
+
+	const newPirates = Array.from( { length: shipfulCount.value }, generatePirateName )
+	const recruitedBatch = newPirates.map( ( pirateName, index ) =>
+		createRecruitedPirate( pirateName, index * ( RECRUIT_FADE_DURATION_MS - RECRUIT_FADE_OVERLAP_MS ) )
+	)
+	recruitedPirates.value.unshift( ...recruitedBatch )
+	name.value = 'A new pirate approaches...'
+	hasGeneratedPirate.value = true
+	isShipfulModalOpen.value = false
+
+}
+
+const giveBlackSpot = ( pirate ) =>
+{
+	recruitedPirates.value = recruitedPirates.value.filter( ( recruitedPirate ) => recruitedPirate.id !== pirate.id )
+	deadPirates.value.unshift( `${ pirate.name } (Black spot)` )
+	if ( deadPirates.value.length > 10 ) {
+		deadPirates.value.pop()
+	}
+}
+
+const closeShipfulModal = () =>
+{
+	isShipfulModalOpen.value = false
 }
 
 const killPirate = () =>
@@ -187,6 +223,8 @@ const closeModal = () =>
 	isModalOpen.value = false
 }
 
+defineExpose( { openShipfulModal } )
+
 const name = ref( 'A new pirate approaches...' )
 
 const loadPreference = () =>
@@ -208,7 +246,11 @@ onMounted( () =>
 	if ( typeof window !== 'undefined' ) {
 		try {
 			const storedRecruited = JSON.parse( window.localStorage.getItem( RECRUITED_KEY ) || '[]' )
-			if ( Array.isArray( storedRecruited ) ) recruitedPirates.value = storedRecruited
+			if ( Array.isArray( storedRecruited ) ) {
+				recruitedPirates.value = storedRecruited
+					.filter( ( pirate ) => typeof pirate === 'string' )
+					.map( createRecruitedPirate )
+			}
 		}
 		catch ( e ) {
 			// fail silently
@@ -251,7 +293,7 @@ onUnmounted( () => {
 watch( recruitedPirates, ( val ) =>
 {
 	if ( typeof window !== 'undefined' ) {
-		window.localStorage.setItem( RECRUITED_KEY, JSON.stringify( val || [] ) )
+		window.localStorage.setItem( RECRUITED_KEY, JSON.stringify( val.map( ( pirate ) => pirate.name ) ) )
 	}
 }, { deep: true } )
 
@@ -285,7 +327,7 @@ const inspectLabel = computed( () =>
 </script>
 
 <template>
-	<div class="generator">
+	<div class="generator" :style="{ '--recruit-fade-duration': `${ RECRUIT_FADE_DURATION_MS }ms` }">
 		<div class="generator__name-container">
 			<div class="generator__name" ref="nameEl" @click="onNameClick" :class="{ 'generator__btn--die-anim': animatingDeath }">
 				<span v-html="name"></span>
@@ -300,33 +342,71 @@ const inspectLabel = computed( () =>
 			</div>
 		</div>
 
-		<div v-if="isModalOpen" class="generator__modal" role="dialog" aria-modal="true">
-			<div class="generator__modal-card">
-				<div class="generator__modal-close-icon" @click="closeModal"><font-awesome-icon icon="circle-xmark" /></div>
-				<p class="generator__modal-intro">Ahoy there, my name is...</p>
-				<p class="generator__modal-title">{{ pendingPirate }}</p>
-				<div class="generator__modal-actions">
-					<div class="generator__modal-action">
-						<button class="generator__btn-button generator__modal-action-button generator__btn-button--recruit" title="Recruit" @click="recruitPirate">
-							<font-awesome-icon icon="anchor" />
-							<span class="generator__modal-action-label">Recruit</span>
-						</button>
+		<Teleport to="body">
+			<div v-if="isModalOpen" class="generator__modal" role="dialog" aria-modal="true">
+				<div class="generator__modal-card">
+					<div class="generator__modal-close-icon" @click="closeModal"><font-awesome-icon icon="circle-xmark" /></div>
+					<p class="generator__modal-intro">Ahoy there, my name is...</p>
+					<p class="generator__modal-title">{{ pendingPirate }}</p>
+					<div class="generator__modal-actions">
+						<div class="generator__modal-action">
+							<button class="generator__btn-button generator__modal-action-button generator__btn-button--recruit" title="Recruit" @click="recruitPirate">
+								<font-awesome-icon icon="anchor" />
+								<span class="generator__modal-action-label">Recruit</span>
+							</button>
+						</div>
+						<div class="generator__modal-action">
+							<button class="generator__btn-button generator__modal-action-button generator__btn-button--kill" title="Kill" @click="killPirate">
+								<font-awesome-icon icon="skull" />
+								<span class="generator__modal-action-label">Reject</span>
+							</button>
+						</div>
 					</div>
-					<div class="generator__modal-action">
-						<button class="generator__btn-button generator__modal-action-button generator__btn-button--kill" title="Kill" @click="killPirate">
-							<font-awesome-icon icon="skull" />
-							<span class="generator__modal-action-label">Reject</span>
-						</button>
-					</div>
+					<!-- <button class="generator__modal-close" @click="closeModal"><font-awesome-icon icon="xmark" /> Close</button> -->
 				</div>
-				<!-- <button class="generator__modal-close" @click="closeModal"><font-awesome-icon icon="xmark" /> Close</button> -->
 			</div>
-		</div>
+
+			<div v-if="isShipfulModalOpen" class="generator__modal" role="dialog" aria-modal="true" aria-labelledby="shipful-modal-title">
+				<form class="generator__modal-card generator__shipful-card" @submit.prevent="recruitShipful">
+					<button class="generator__modal-close-icon" type="button" aria-label="Close" @click="closeShipfulModal">
+						<font-awesome-icon icon="circle-xmark" />
+					</button>
+					<label id="shipful-modal-title" class="generator__modal-intro" for="shipful-count">
+						How many scallywags d'ye need?
+					</label>
+					<input
+						id="shipful-count"
+						v-model.number="shipfulCount"
+						class="generator__shipful-count"
+						type="number"
+						min="1"
+						max="100"
+						step="1"
+						required
+					/>
+					<button class="generator__btn-button generator__shipful-submit" type="submit" :disabled="!isShipfulCountValid">
+						<font-awesome-icon icon="anchor" />
+						<span>Bring 'em aboard</span>
+					</button>
+				</form>
+			</div>
+		</Teleport>
 
 		<div class="generator__factoid"></div>
-		<div v-if="recruitedPiratesOutput.length" class="generator__log generator__log--recruited">
+		<div v-show="recruitedPirates.length" class="generator__log generator__log--recruited">
 			<h3 class="generator__log-title">Recruited pirates</h3>
-			<p v-html="recruitedPiratesOutput"></p>
+			<TransitionGroup name="recruit-fade" tag="p" class="generator__recruited-list">
+				<span
+					v-for="pirate in recruitedPirates"
+					:key="pirate.id"
+					class="generator__recruit-entry"
+					:style="{ '--recruit-fade-delay': `${ pirate.fadeDelay }ms` }"
+				>
+					<a href="#" class="generator__recruit-link" @click.prevent="giveBlackSpot( pirate )">
+						{{ pirate.name }}<span class="generator__recruit-tooltip">Give the Black Spot</span>
+					</a>
+				</span>
+			</TransitionGroup>
 		</div>
 		<div v-if="deadPiratesOutput.length" class="generator__log">
 			<h3 class="generator__log-title">Rejected pirates</h3>
@@ -392,14 +472,14 @@ const inspectLabel = computed( () =>
 	display: flex;
 	align-items: center;
 	gap: 1rem;
-	padding: 1rem 1.5rem;
+	padding: var(--space-2) var(--space-3);
 	cursor: pointer;
 	background-color: var(--color-button-bg);
 	color: var(--color-link);
 	border: var(--border-width) solid var(--color-border);
 	border-radius: var(--border-radius);
 	font-size: var(--font-size-button);
-	transition: background-color 0.3s ease;
+	transition: background-color var(--button-transition-duration) ease;
 
 	&:hover
 	{
@@ -431,12 +511,12 @@ const inspectLabel = computed( () =>
 {
 	position: fixed;
 	inset: 0;
-	background: rgba(0, 0, 0, 0.65);
+	background: var(--modal-overlay-background);
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	padding: 1rem;
-	z-index: 50;
+	padding: var(--space-2);
+	z-index: var(--modal-z-index);
 }
 
 .generator__modal-card
@@ -445,11 +525,54 @@ const inspectLabel = computed( () =>
 	background-color: var(--color-background-soft);
 	border: var(--border-width) solid var(--color-border);
 	border-radius: var(--border-radius);
-	padding: 1.5rem;
-	max-width: 36rem;
+	padding: var(--modal-padding);
+	max-width: var(--modal-max-width);
 	width: 100%;
 	text-align: center;
-	box-shadow: 0 0 2rem .5rem var(--color-glow);
+	box-shadow: var(--modal-shadow);
+}
+
+.generator__shipful-card
+{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1rem;
+}
+
+.generator__shipful-card .generator__modal-intro
+{
+	margin: 0;
+}
+
+.generator__shipful-count
+{
+	width: 8rem;
+	padding: var(--space-1);
+	border: var(--border-width) solid var(--color-border);
+	border-radius: var(--border-radius);
+	background-color: var(--color-background);
+	color: var(--color-text);
+	font-size: var(--font-size-title);
+	text-align: center;
+}
+
+.generator__shipful-count::-webkit-inner-spin-button,
+.generator__shipful-count::-webkit-outer-spin-button
+{
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+.generator__shipful-count
+{
+	-moz-appearance: textfield;
+}
+
+.generator__shipful-submit:disabled
+{
+	cursor: not-allowed;
+	opacity: .5;
 }
 
 .generator__modal-close-icon {
@@ -458,6 +581,7 @@ const inspectLabel = computed( () =>
 	right: .5rem;
 	cursor: pointer;
 	color: var(--color-glow);
+	font-size: var(--font-size-button);
 
 	&:hover {
 		color: var(--color-glow-mute);
@@ -521,7 +645,7 @@ const inspectLabel = computed( () =>
 {
 	margin-top: 1.5rem;
 	border-top: 1px solid var(--color-border);
-	padding: 1rem 0 0 0;
+	padding: var(--space-2) 0 0;
 	text-align: left;
 	font-size: var(--font-size-body);
 	color: var(--color-text-muted);
@@ -534,14 +658,64 @@ const inspectLabel = computed( () =>
 	color: var(--color-text-grey);
 }
 
+.generator__recruit-link
+{
+	position: relative;
+	color: inherit;
+	text-decoration: none;
+}
+
+.generator__recruit-link:hover
+{
+	color: var(--color-link-active);
+	text-decoration: underline;
+}
+
+.generator__recruit-tooltip
+{
+	position: absolute;
+	left: 50%;
+	bottom: calc(100% + var(--space-1));
+	z-index: 1;
+	display: none;
+	padding: var(--space-1);
+	transform: translateX(-50%);
+	border: var(--border-width) solid var(--color-border);
+	border-radius: var(--border-radius);
+	background-color: var(--color-background-soft);
+	box-shadow: var(--modal-shadow);
+	white-space: nowrap;
+	color: var(--color-text);
+}
+
+.generator__recruit-link:hover .generator__recruit-tooltip,
+.generator__recruit-link:focus .generator__recruit-tooltip
+{
+	display: block;
+}
+
+.generator__recruit-entry:not(:last-child)::after
+{
+	content: ', ';
+}
+
+.recruit-fade-enter-active
+{
+	transition: opacity var(--recruit-fade-duration) ease var(--recruit-fade-delay);
+}
+
+.recruit-fade-enter-from
+{
+	opacity: 0;
+}
+
 .generator__log span.log-0,
-.generator__log span.recruit-0
+.generator__log span.generator__recruit-entry:first-child
 {
 	color: var(--color-text-grey);
 }
 
-.generator__log span.log-1,
-.generator__log span.recruit-1
+.generator__log span.log-1
 {
 	color: var(--color-text-greyer);
 }
@@ -567,21 +741,11 @@ const inspectLabel = computed( () =>
 
 /* Small fade/scale animation for modal appearance */
 .generator__modal {
-	animation: modal-fade 180ms ease-out;
+	animation: modal-fade var(--modal-fade-duration) var(--modal-fade-easing);
 }
 
 .generator__modal-card {
-	animation: modal-pop 220ms cubic-bezier(0.2, 0.9, 0.25, 1);
+	animation: modal-pop var(--modal-pop-duration) var(--modal-pop-easing);
 	transform-origin: center top;
-}
-
-@keyframes modal-fade {
-	from { opacity: 0 }
- 	to { opacity: 1 }
-}
-
-@keyframes modal-pop {
- 	from { transform: translateY(8px) scale(0.985); opacity: 0 }
- 	to { transform: translateY(0) scale(1); opacity: 1 }
 }
 </style>

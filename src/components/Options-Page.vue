@@ -4,8 +4,8 @@ import { useRouter } from 'vue-router'
 
 const STORAGE_KEY = 'pirate-name-gender-preference'
 const preferenceOptions = [
-	{ value: 'male', label: 'Lads' },
-	{ value: 'female', label: 'Lasses' },
+	{ value: 'male', label: 'Just Lads' },
+	{ value: 'female', label: 'Just Lasses' },
 	{ value: 'any', label: 'I\'ll take anyone!' },
 ]
 
@@ -99,24 +99,23 @@ onMounted( () =>
 				</button>
 			</div>
 
-			<div v-if="confirmOpen" class="options-page__modal" role="dialog" aria-modal="true">
-				<div class="options-page__modal-card">
-					<p class="options-page__modal-intro">...and good riddance!</p>
-					<div class="options-page__modal-actions">
-						<div class="options-page__modal-action">
-							<button class="options-page__button options-page__modal-action-button options-page__confirm-accept" @click="confirmAndGo">Recruit more pirates</button>
-						</div>
-						<div class="options-page__modal-action">
-							<button class="options-page__button options-page__modal-action-button" @click="closeConfirm">Close</button>
+			<Teleport to="body">
+				<div v-if="confirmOpen" class="options-page__modal" role="dialog" aria-modal="true">
+					<div class="options-page__modal-card">
+						<p class="options-page__modal-intro">...and good riddance!</p>
+						<div class="options-page__modal-actions">
+							<div class="options-page__modal-action">
+								<button class="options-page__button options-page__modal-action-button options-page__confirm-accept" @click="confirmAndGo">Recruit more pirates</button>
+							</div>
+							<div class="options-page__modal-action">
+								<button class="options-page__button options-page__modal-action-button" @click="closeConfirm">No, keep 'em'</button>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
+			</Teleport>
 		</div>
 
-		<p class="options-page__back-btn-wrapper">
-			<RouterLink :to="{ name: 'main' }"><font-awesome-icon icon="arrow-left" /> Back</RouterLink>
-		</p>
 	</div>
 </template>
 
@@ -174,7 +173,7 @@ h2 {
 	font-size: var(--font-size-button);
 	font-weight: var(--font-weigt-button);
 	line-height: var(--line-height-button);
-	transition: background-color 0.2s ease, transform 0.2s ease;
+	transition: background-color var(--button-transition-duration) ease, transform var(--button-transition-duration) ease;
 }
 
 .options-page__button:hover
@@ -195,12 +194,12 @@ h2 {
 {
 	position: fixed;
 	inset: 0;
-	background: rgba(0, 0, 0, 0.65);
+	background: var(--modal-overlay-background);
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	padding: 1rem;
-	z-index: 50;
+	padding: var(--space-2);
+	z-index: var(--modal-z-index);
 }
 
 .options-page__modal-card
@@ -209,11 +208,11 @@ h2 {
 	background-color: var(--color-background-soft);
 	border: var(--border-width) solid var(--color-border);
 	border-radius: var(--border-radius);
-	padding: 1.5rem;
-	max-width: 36rem;
+	padding: var(--modal-padding);
+	max-width: var(--modal-max-width);
 	width: 100%;
 	text-align: center;
-	box-shadow: 0 0 2rem .5rem var(--color-glow);
+	box-shadow: var(--modal-shadow);
 }
 
 .options-page__modal-intro
@@ -249,12 +248,12 @@ h2 {
 /* Match Name-Generator modal entrance animation */
 .options-page__modal
 {
-	animation: modal-fade 180ms ease-out;
+	animation: modal-fade var(--modal-fade-duration) var(--modal-fade-easing);
 }
 
 .options-page__modal-card
 {
-	animation: modal-pop 220ms cubic-bezier(0.2, 0.9, 0.25, 1);
+	animation: modal-pop var(--modal-pop-duration) var(--modal-pop-easing);
 	transform-origin: center top;
 }
 
@@ -264,31 +263,4 @@ h2 {
     margin-bottom: var(--margin-bottom-body);
 }
 
-@keyframes modal-fade
-{
-	from
-	{
-		opacity: 0
-	}
-
-	to
-	{
-		opacity: 1
-	}
-}
-
-@keyframes modal-pop
-{
-	from
-	{
-		transform: translateY(8px) scale(0.985);
-		opacity: 0
-	}
-
-	to
-	{
-		transform: translateY(0) scale(1);
-		opacity: 1
-	}
-}
 </style>

@@ -52,7 +52,24 @@
 	--gap: 2rem;
 	--border-radius: 1rem;
 	--border-width: 0.125rem;
-	--button-padding: 1rem 1.5rem;
+	--space-1: .5rem;
+	--space-2: 1rem;
+	--space-3: 1.5rem;
+	--space-4: 2rem;
+	--space-6: 3rem;
+	--space-8: 4rem;
+	--button-padding: var(--space-2) var(--space-3);
+	--button-transition-duration: 0.3s;
+
+	--modal-overlay-background: rgba(0, 0, 0, 0.65);
+	--modal-shadow: 0 0 2rem .5rem var(--color-glow);
+	--modal-max-width: 36rem;
+	--modal-padding: var(--space-3);
+	--modal-z-index: 50;
+	--modal-fade-duration: 180ms;
+	--modal-fade-easing: ease-out;
+	--modal-pop-duration: 220ms;
+	--modal-pop-easing: cubic-bezier(0.2, 0.9, 0.25, 1);
 }
 
 /* font styles */
@@ -84,7 +101,16 @@
 	--line-height-button: 1;
 }
 
-/* animation for recruited/rejected pirate name */
+@keyframes modal-fade {
+	from { opacity: 0 }
+	to { opacity: 1 }
+}
+
+@keyframes modal-pop {
+	from { transform: translateY(8px) scale(0.985); opacity: 0 }
+	to { transform: translateY(0) scale(1); opacity: 1 }
+}
+
 @keyframes approach-and-sway {
 	0% {
 		transform: scale(0.7) translate(66px, 0) rotate(0deg) skew(0deg, 0deg);

@@ -22,7 +22,7 @@ const currentRouteName = computed( () => route.name )
 		</span>
 		<span class="footer__separator">|</span>
 		<span>
-			<RouterLink :to="{ name: 'main', query: { recruit: 'shipful' } }">Recruit a Shipful</RouterLink>
+			<RouterLink :to="{ name: 'main', query: { recruit: 'shipful' } }">Recruit a Shipful!</RouterLink>
 		</span>
 		<span class="footer__separator">|</span>
 		<span>

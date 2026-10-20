@@ -133,7 +133,6 @@
 		"female": [
 			"Adeline",
 			"Agnes",
-
 			"Alice",
 			"Amelia",
 			"Amy",
@@ -185,7 +184,6 @@
 			"Hecate",
 			"Helen",
 			"Helena",
-			"Hemlock",
 			"Henrietta",
 			"Hester",
 			"Honour",
@@ -343,7 +341,8 @@
 			"Giselle",
 			"Mireille",
 			"Margot",
-      			"Vivienne"
+      		"Vivienne",
+			"Sabine"
 		]
 	},
 	"spanish": {
@@ -374,7 +373,7 @@
 			"Catalina",
 			"Elena",
 			"Esmeralda",
-      "Ginevra",
+      		"Ginevra",
 			"Inez",
 			"Isabel",
 			"Isabella",
@@ -447,6 +446,7 @@
 			"Elspeth",
 			"Fiona",
 			"Gwen",
+			"Hemlock",
 			"Maire",
 			"Maren",
 			"Rhiannon",
